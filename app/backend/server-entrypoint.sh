@@ -1,7 +1,7 @@
 #!/bin/bash
 
-apt update 
-apt install curl -y
+#apt update 
+#apt install curl -y
 # Apply database migrations
 python3  manage.py migrate
 
