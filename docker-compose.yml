@@ -28,6 +28,6 @@ services:
   nginxcontainer:
     image: nginximage:nginxtag
     ports:
-      - "6000:80"
+      - "9000:80"
     depends_on:
       - workercontainer
