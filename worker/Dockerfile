@@ -26,7 +26,7 @@ RUN pip3 install -r requirements.txt
 
 RUN pip3 install gunicorn
 
-EXPOSE 9000
+# EXPOSE 9000
 
 RUN chmod +x /home/backend/worker-entrypoint.sh 
 CMD ["./backend/worker-entrypoint.sh"]
