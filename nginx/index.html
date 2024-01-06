@@ -1,0 +1,40 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Calculator</title>
+    <script>
+        function calculate() {
+            var num1 = parseFloat(document.getElementById("num1").value);
+            var num2 = parseFloat(document.getElementById("num2").value);
+
+            if (!isNaN(num1) && !isNaN(num2)) {
+                var result = num1 + num2;
+                document.getElementById("result").innerHTML = "Result: " + result;
+            } else {
+                document.getElementById("result").innerHTML = "Invalid input. Please enter valid numbers.";
+            }
+
+            return false; // Prevent form submission
+        }
+    </script>
+</head>
+<body>
+
+<h1>Simple Calculator</h1>
+
+<form onsubmit="return calculate()">
+    <label for="num1">Number 1:</label>
+    <input type="text" id="num1" name="num1" required>
+    <br>
+    <label for="num2">Number 2:</label>
+    <input type="text" id="num2" name="num2" required>
+    <br>
+    <input type="submit" value="Add">
+</form>
+
+<div id="result"></div>
+
+</body>
+</html>
+

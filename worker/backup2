@@ -1,0 +1,49 @@
+# Use the official Python 3.8 image with Ubuntu 20.04 as the base image
+FROM python:3.8-slim-buster
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Set the working directory to /app
+WORKDIR /app
+
+# Copy the requirements and environment files to the container
+COPY requirements.txt /app/
+COPY env-server.txt /app/
+
+
+# Install system dependencies
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+        libpq-dev \
+        && rm -rf /var/lib/apt/lists/*
+
+
+# Install pip and gunicorn
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+RUN pip3 install gunicorn
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Load environment variables from env-server.txt during the build
+RUN ["bash", "-c", "set -o allexport && source env-server.txt && set +o allexport"]
+
+# Copy the entire project to the container
+COPY . /app/
+
+# Switch to the backend directory
+WORKDIR /app/backend
+
+# Ensure Python is in the PATH for the script
+ENV PATH="/usr/local/bin/python:${PATH}"
+
+COPY  backend/server-entrypoint.sh  .
+# Command to run migrations and start the Django application
+CMD ["bash", "server-entrypoint.sh"]
+

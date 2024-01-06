@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  postgrescontainer:
+    image: postgresimage:postgrestag
+    environment:
+      POSTGRES_PASSWORD: postgres
+      
+  rediscontainer:
+    image: redisiamges:redistag
+    depends_on:
+      - postgrescontainer
+
+  servercontainer:
+    image: serverimage:servertag
+    depends_on:
+      - rediscontainer
+    healthcheck:
+        test:  curl localhost:8080 ||  bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+        interval: 10s
+        timeout: 30s
+        retries: 3 
+  workercontainer:
+    image: workerimage:workertag
+    depends_on:
+      - servercontainer
+
+  nginxcontainer:
+    image: nginximage:nginxtag
+    ports:
+      - "8080:80"
+    depends_on:
+      - workercontainer
